@@ -1,34 +1,25 @@
 import './App.css';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
+import LabelBar from './LabelBar';
+import ImageList from './ImageList';
 import Canvas from './Canvas';
+
+// Layout reference: https://www.codeply.com/p/VVByb17KWb
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
-      <div className="container-fluid">
-        <div className="row">
-          <Sidebar />
-          <Canvas />
+      <div className="d-flex" id="wrapper">
+        { /* ImageList */ }
+        <div className="bg-light border-right vh-100" id="sidebar-wrapper">
+          <div className="sidebar-heading">Labeling Tool</div>
+          <ImageList />
         </div>
-        { /* the following contents are to-be-deleted */ }
-        <div className="row">
-          <h3>Key features</h3>
-          <ul>
-            <li>
-              Present an image to review (in a random order)
-            </li>
-            <li>
-              Select a class among multiple classes to label
-            </li>
-            <li>
-              Store labels into a database
-            </li>
-            <li>
-              Export labels as as JSON file
-            </li>
-          </ul>
+        { /* /ImageList */ }
+
+        { /* Page Content */ }
+        <div id="page-content-wrapper">
+          <LabelBar />
+          <Canvas />
         </div>
       </div>
     </div>

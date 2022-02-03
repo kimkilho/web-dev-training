@@ -1,8 +1,26 @@
 function Canvas(props) {
   return (
-    <main className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4" role="main">
+    <div className="container-fluid">
       <canvas width="512px" height="512px" />
-    </main>
+      <div className="row">
+        { /* the following contents are to-be-deleted */ }
+        <h3>Key features</h3>
+        <ul>
+          <li>
+            Present an image to review (in a random order)
+          </li>
+          <li>
+            Select a class among multiple classes to label
+          </li>
+          <li>
+            Store labels into a database
+          </li>
+          <li>
+            Export labels as as JSON file
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 }
 
