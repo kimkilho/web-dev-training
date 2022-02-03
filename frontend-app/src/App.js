@@ -10,7 +10,7 @@ function App() {
   const [imgFilenames, setImgFilenames] = useState(null);
 
   const retrieveImgFilenames = async () => {
-    const response = await fetch('/api', {
+    const response = await fetch('/api/', {
       method: 'GET',
     });
 
