@@ -2,7 +2,7 @@ import os
 import os.path as osp
 import random
 
-from fastapi import FastAPI, Depends, status, HTTPException
+from fastapi import FastAPI, Depends
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
@@ -47,6 +47,23 @@ def read_label(filename: str, db: Session = Depends(get_db)):
         label = schemas.LabelCreate(filename=filename, label_idx=-1)
         return crud.create_label(db, label=label)
     return db_label
+
+
+@app.get('/api/labels/')
+def read_labels_as_file(skip: int = 0, limit: int = 110, db: Session = Depends(get_db)):
+    db_labels = crud.read_labels(db, skip=skip, limit=limit)
+
+    # Filter label instances whose label_idx == -1
+    filtered_labels = []
+    for db_label in db_labels:
+        if db_label.label_idx == -1:
+            continue
+        filtered_labels.append({
+            'filename': db_label.filename,
+            'label': 'dogs' if db_label.label_idx == 0 else 'cats',
+        })
+
+    return filtered_labels
 
 
 @app.post('/api/labels', response_model=schemas.Label)

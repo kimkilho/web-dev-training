@@ -7,6 +7,10 @@ def read_label_by_filename(db: Session, filename: str):
     return db.query(models.Label).filter(models.Label.filename == filename).first()
 
 
+def read_labels(db: Session, skip: int = 0, limit: int = 110):
+    return db.query(models.Label).offset(skip).limit(limit).all()
+
+
 def create_label(db: Session, label: schemas.LabelCreate):
     db_label = models.Label(filename=label.filename, label_idx=label.label_idx)
     db.add(db_label)
