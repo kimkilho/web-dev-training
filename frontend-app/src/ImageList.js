@@ -9,16 +9,21 @@ function ImageList(props) {
   useEffect(() => {
     const tempImgFilenames = [];
 
-    const handleOnClick = (filename, i) => {
+    const handleImgItemOnClick = (filename, i) => {
       props.retrieveImgFile(filename);
+      props.retrieveLabel(filename);
       setSelectedImgIdx(i);
     }
 
     if (props.imgFilenames) {
       props.imgFilenames.forEach((filename, i) => {
         const selectedFlag = i === selectedImgIdx ? 'selected ' : '';
-        const imgItem = <a key={i} href="#" onClick={() => handleOnClick(filename, i)}
-                           className={selectedFlag + "list-group-item list-group-item-action bg-light}"}>{ filename }</a>
+        const imgItem =
+          <a key={i} href="#" onClick={() => handleImgItemOnClick(filename, i)}
+             className={selectedFlag + "list-group-item list-group-item-action bg-light"}
+          >
+            { filename }
+          </a>
         tempImgFilenames.push(imgItem);
       });
       setImgFilenames(tempImgFilenames);

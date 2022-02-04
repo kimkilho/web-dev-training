@@ -8,7 +8,9 @@ import Canvas from './Canvas';
 
 function App() {
   const [imgFilenames, setImgFilenames] = useState(null);
+  const [imgFilename, setImgFilename] = useState('');
   const [imgBlob, setImgBlob] = useState(null);
+  const [label, setLabel] = useState(-1);
 
   const retrieveImgFilenames = async () => {
     const response = await fetch('/api/', {
@@ -27,7 +29,35 @@ function App() {
 
     if (response.status === 200) {
       const imgBlob = await response.blob();
+      setImgFilename(filename);
       setImgBlob(imgBlob);
+    }
+  };
+
+  const retrieveLabel = async (filename) => {
+    const response = await fetch(`/api/labels/${filename}`, {
+      method: 'GET',
+    });
+
+    if (response.status === 200) {
+      const labelData = await response.json();
+      setLabel(labelData.label_idx);
+    }
+  };
+
+  const updateLabel = async (labelIdx) => {
+    const data = {filename: imgFilename, label_idx: labelIdx}
+    const response = await fetch('/api/labels', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json' ,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.status === 200) {
+      const labelData = await response.json();
+      setLabel(labelData.label_idx);
     }
   };
 
@@ -43,13 +73,20 @@ function App() {
         { /* ImageList */ }
         <div className="bg-light border-right vh-100" id="sidebar-wrapper">
           <div className="sidebar-heading">Labeling Tool</div>
-          <ImageList imgFilenames={imgFilenames} retrieveImgFile={retrieveImgFile} />
+          <ImageList
+            imgFilenames={imgFilenames}
+            retrieveImgFile={retrieveImgFile}
+            retrieveLabel={retrieveLabel}
+          />
         </div>
         { /* /ImageList */ }
 
         { /* Page Content */ }
         <div id="page-content-wrapper">
-          <LabelBar />
+          <LabelBar
+            label={label}
+            updateLabel={updateLabel}
+          />
           <Canvas imgBlob={imgBlob} />
         </div>
         { /* /Page Content */ }
