@@ -3,7 +3,6 @@ import os.path as osp
 import io, base64
 from typing import Optional
 import random
-random.seed(2022)
 
 import numpy as np
 from PIL import Image
@@ -12,14 +11,14 @@ from fastapi.responses import Response, FileResponse
 
 
 img_dir = osp.join(os.getcwd(), '..', 'images')
+filenames = os.listdir(img_dir)
+random.Random(2022).shuffle(filenames)
+
 app = FastAPI()
 
 
 @app.get('/api/')
 def read_root():
-    filenames = os.listdir(img_dir)
-    # random.shuffle(filenames)
-
     return filenames
 
 
