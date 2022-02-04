@@ -1,7 +1,18 @@
 function LabelBar(props) {
   const handleLabelOnClick = (labelIdx) => {
     props.updateLabel(labelIdx);
-  }
+  };
+  const handleExportLabelsOnClick = async () => {
+    const labelsData = await props.retrieveLabels();
+    const jsonData = JSON.stringify(labelsData);
+    const blob = new Blob([jsonData], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'exported_labels.json';
+    a.click();
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -24,6 +35,13 @@ function LabelBar(props) {
             >
               Cats
             </a>
+          </li>
+        </ul>
+      </div>
+      <div className="collapse navbar-collapse justify-content-end">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <a className="nav-link" href="#" onClick={handleExportLabelsOnClick}>Export Labels</a>
           </li>
         </ul>
       </div>

@@ -45,6 +45,17 @@ function App() {
     }
   };
 
+  const retrieveLabels = async () => {
+    const response = await fetch('/api/labels/', {
+      method: 'GET',
+    });
+
+    if (response.status === 200) {
+      const labelsData = await response.json();
+      return labelsData;
+    }
+  };
+
   const updateLabel = async (labelIdx) => {
     const data = {filename: imgFilename, label_idx: labelIdx}
     const response = await fetch('/api/labels', {
@@ -86,6 +97,7 @@ function App() {
           <LabelBar
             label={label}
             updateLabel={updateLabel}
+            retrieveLabels={retrieveLabels}
           />
           <Canvas imgBlob={imgBlob} />
         </div>
