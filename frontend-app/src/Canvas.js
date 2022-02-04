@@ -9,16 +9,15 @@ function Canvas(props) {
     const context = canvas.getContext('2d');
 
     if (props.imgBlob) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-
       const imgURL = URL.createObjectURL(props.imgBlob);
       const img = new Image();
       img.onload = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, 0, 0);
       };
       img.src = imgURL;
     }
-  });
+  }, [props]);
 
   return (
     <div className="container-fluid">
