@@ -43,7 +43,9 @@ def read_file(filename: str):
 def read_label(filename: str, db: Session = Depends(get_db)):
     db_label = crud.read_label_by_filename(db, filename=filename)
     if db_label is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Label not found')
+        # Create an 'unlabeled' label instance manually
+        label = schemas.LabelCreate(filename=filename, label_idx=-1)
+        return crud.create_label(db, label=label)
     return db_label
 
 
