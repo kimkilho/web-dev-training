@@ -8,6 +8,7 @@ import Canvas from './Canvas';
 
 function App() {
   const [imgFilenames, setImgFilenames] = useState(null);
+  const [imgBlob, setImgBlob] = useState(null);
 
   const retrieveImgFilenames = async () => {
     const response = await fetch('/api/', {
@@ -16,6 +17,17 @@ function App() {
 
     if (response.status === 200) {
       setImgFilenames(await response.json());
+    }
+  };
+
+  const retrieveImgFile = async (filename) => {
+    const response = await fetch(`/api/${filename}`, {
+      method: 'GET',
+    });
+
+    if (response.status === 200) {
+      const imgBlob = await response.blob();
+      setImgBlob(imgBlob);
     }
   };
 
@@ -31,14 +43,14 @@ function App() {
         { /* ImageList */ }
         <div className="bg-light border-right vh-100" id="sidebar-wrapper">
           <div className="sidebar-heading">Labeling Tool</div>
-          <ImageList imgFilenames={imgFilenames} />
+          <ImageList imgFilenames={imgFilenames} retrieveImgFile={retrieveImgFile} />
         </div>
         { /* /ImageList */ }
 
         { /* Page Content */ }
         <div id="page-content-wrapper">
           <LabelBar />
-          <Canvas />
+          <Canvas imgBlob={imgBlob} />
         </div>
         { /* /Page Content */ }
       </div>
