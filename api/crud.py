@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-import models, schemas
+from . import models, schemas
 
 
 def read_label_by_filename(db: Session, filename: str):

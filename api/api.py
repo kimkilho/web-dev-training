@@ -6,13 +6,13 @@ from fastapi import FastAPI, Depends
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-import crud, models, schemas
-from database import SessionLocal, engine
+from . import crud, models, schemas
+from .database import SessionLocal, engine
 
 
 models.Base.metadata.create_all(bind=engine)
 
-img_dir = osp.join(os.getcwd(), '..', 'images')
+img_dir = osp.join(os.getcwd(), 'images')
 filenames = os.listdir(img_dir)
 random.Random(2022).shuffle(filenames)
 
