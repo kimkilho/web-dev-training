@@ -7,5 +7,5 @@ COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./api /code/api
 ADD ./images /code/images
-EXPOSE 8000
-CMD ["uvicorn", "api.api:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 6115
+CMD ["uvicorn", "api.api:app", "--host", "0.0.0.0", "--port", "6115"]
