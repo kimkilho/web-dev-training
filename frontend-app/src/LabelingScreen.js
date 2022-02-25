@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import './LabelingScreen.css';
 import LabelBar from './LabelBar';
 import ImageList from './ImageList';
 import Canvas from './Canvas';
 
 // Layout reference: https://www.codeply.com/p/VVByb17KWb
 
-function App() {
+function LabelingScreen() {
   const [imgFilenames, setImgFilenames] = useState(null);
   const [imgFilename, setImgFilename] = useState('');
   const [imgBlob, setImgBlob] = useState(null);
@@ -107,4 +107,4 @@ function App() {
   );
 }
 
-export default App;
+export default LabelingScreen;
