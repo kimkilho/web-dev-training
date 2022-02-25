@@ -18,8 +18,22 @@ function ClassifierScreen() {
   }
 
   const predict = async () => {
-    console.log('predict() called');
-  }
+    const formData = new FormData();
+    formData.append('file', imageRef.current);
+
+    const response = await fetch('/api/predict', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.status === 200) {
+      console.log(response);
+      const predictionData = await response.json();
+      setResult(predictionData.filename);    // FIXME
+    } else {
+      console.log('Error from API.');
+    }
+  };
 
   return (
     <>
