@@ -1,8 +1,11 @@
 import os
 import os.path as osp
 import random
+import io
 
-from fastapi import FastAPI, Depends
+from PIL import Image
+import numpy as np
+from fastapi import FastAPI, Depends, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
@@ -72,3 +75,13 @@ def create_or_update_label(label: schemas.LabelCreate, db: Session = Depends(get
     if db_label:
         return crud.update_label(db, label=label)
     return crud.create_label(db, label=label)
+
+
+@app.post('/api/predict')
+async def predict(file: UploadFile):
+    image_bytes = io.BytesIO(await file.read())
+    image = np.array(Image.open(image_bytes), dtype=np.float32) / 255
+            # shape: (H, W, C), range: [0.0, 1.0]
+
+    # TODO: Implement API requests to AML Webservice
+    return {'filename': file.filename}
