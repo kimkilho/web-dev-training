@@ -5,7 +5,7 @@ function ClassifierScreen() {
   const [imageURL, setImageURL] = useState(null);
   const [result, setResult] = useState('');
   const imageRef = useRef();
-  const classNames = ['dogs', 'cats'];
+  const classNames = ['cats', 'dogs'];
 
   const uploadImage = async (e) => {
     const { files } = e.target;
