@@ -17,6 +17,12 @@ node_modules
 # production
 /build
 
+# trained model file
+asirra_ResNet50.pth
+
+# Azure ML config file
+ws-config.json
+
 # misc
 .DS_Store
 .env.local
