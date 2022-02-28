@@ -5,15 +5,16 @@ function ClassifierScreen() {
   const [imageURL, setImageURL] = useState(null);
   const [result, setResult] = useState('');
   const imageRef = useRef();
+  const classNames = ['dogs', 'cats'];
 
   const uploadImage = async (e) => {
-    // console.log('uploadImage() called');
     const { files } = e.target;
     if (files.length > 0) {
       const file = files[0];
       imageRef.current = file;
       const url = URL.createObjectURL(file);
       setImageURL(url);
+      setResult('');
     }
   }
 
@@ -27,9 +28,13 @@ function ClassifierScreen() {
     });
 
     if (response.status === 200) {
-      console.log(response);
       const predictionData = await response.json();
-      setResult(predictionData.filename);    // FIXME
+      const tempResult = [];
+      predictionData.map((x, i) => {
+        const string = `${classNames[i]}: ${x}`;
+        tempResult.push(<p key={i}>{string}</p>)
+      });
+      setResult(tempResult);
     } else {
       console.log('Error from API.');
     }
@@ -59,7 +64,8 @@ function ClassifierScreen() {
       <div className="button-holder">
         {imageURL && <button className="button" onClick={predict}>
           Predict</button>}
-        <p>Prediction result: <b>{result}</b></p>
+        <p>Prediction result:</p>
+        {result}
       </div>
     </>
   );
