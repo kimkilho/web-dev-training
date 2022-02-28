@@ -1,14 +1,20 @@
 import os
 import os.path as osp
 import random
+import io
+import base64
+import requests
 
-from fastapi import FastAPI, Depends
+from PIL import Image
+import numpy as np
+from fastapi import FastAPI, Depends, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
 
+SERVICE_ENDPOINT_URI = 'http://cf1cd246-d51c-435b-bf4f-9484db1b3275.koreacentral.azurecontainer.io/score'
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -26,6 +32,12 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# Softmax function
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    return np.exp(x) / np.sum(np.exp(x), axis=0)
 
 
 @app.get('/api/')
@@ -72,3 +84,17 @@ def create_or_update_label(label: schemas.LabelCreate, db: Session = Depends(get
     if db_label:
         return crud.update_label(db, label=label)
     return crud.create_label(db, label=label)
+
+
+@app.post('/api/predict')
+async def predict(file: UploadFile):
+    uploaded_file = await file.read()
+    img_b64 = base64.b64encode(uploaded_file)
+    req_data = '{"image": "' + img_b64.decode('utf-8') + '"}'
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(SERVICE_ENDPOINT_URI, req_data, headers=headers)
+
+    scores = response.json()
+    probs = softmax(scores)
+
+    return probs.tolist()
